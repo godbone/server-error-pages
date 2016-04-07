@@ -1,0 +1,1 @@
+Translatable error pages with https://github.com/alexphelps/server-error-pages as base

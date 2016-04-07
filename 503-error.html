@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>503</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+	<style>
+		.jumbotron {
+			font-size: 21px;
+			font-weight: 200;
+			line-height: 2.1428571435;
+			color: inherit;
+			padding: 10px 0px;
+		}
+		.masthead, .body-content, {
+			padding-left: 15px;
+			padding-right: 15px;
+		}
+		.jumbotron {
+			text-align: center;
+			background-color: transparent;
+		}
+		.jumbotron .btn {
+			font-size: 21px;
+			padding: 14px 24px;
+		}
+		.green {color:#5cb85c;}
+		.orange {color:#f0ad4e;}
+		.red {color:#d9534f;}
+		header{
+			width:100%;
+			height:40px;
+			background:#212121;
+			padding:0 20px 0 20px;
+		}
+		#i18n-menu{
+			display: inherit;
+			text-decoration: none;
+			color:white;
+			padding:0;
+			margin:0;
+			font-size: 0;
+		}
+		#i18n-menu a{
+			color:#C9C9C9;
+			display: block;
+			padding:0 5px 0 5px;
+			min-width: 50px;
+		}
+		#i18n-menu li{
+			font-size: 16px;
+			text-align: center;
+			list-style: none;
+			display: inline-block;
+			height:100%;
+			line-height: 40px;
+			cursor:pointer;
+		}
+		#i18n-menu li:hover{
+			background:#555555;
+		}
+	</style>
+	<script type="text/javascript">
+		function loadDomain() {
+			var display = document.getElementById("display-domain");
+			display.innerHTML = document.domain;
+		}
+	</script>
+</head>
+<body onload="javascript:loadDomain();">
+<header>
+	<ul id="i18n-menu">
+		<li><a href="#" id="fi-FI">FI</a></li>
+		<li><a href="#" id="en-GB">EN</a></li>
+	</ul>
+</header>
+<div class="container">
+	<div class="jumbotron">
+		<h1><i class='fa fa-exclamation-triangle orange'></i> <span id="p1"></span></h1>
+		<p class="lead"><span id="p2"></span> <em><span id='display-domain'></span></em>.</p>
+		<p><a href="javascript:document.location.reload(true);" class="btn btn-default btn-lg"><span class="green" id="p3"></span></a>
+		</p>
+	</div>
+</div>
+<div class="container">
+	<div class="body-content">
+		<div class="row">
+			<div class="col-md-6">
+				<h2 id="p4"></h2>
+				<p id="p5" class="lead"></p>
+			</div>
+			<div class="col-md-6">
+				<h2 id="p6"></h2>
+				<p id="p7" class="lead"></p>
+				<p id="p8"></p>
+				<p id="p9" class="lead"></p>
+				<p id="p10"></p>
+		 </div>
+		</div>
+	</div>
+</div>
+<script>
+	var lang = {
+		fi: {
+			p1: "503 Palvelu ei ole saatavilla",
+			p2: "Sivustolla tapahtui väliaikainen virhe osoitteessa",
+			p3: "Päivitä sivu",
+			p4: "Mitä tapahtui?",
+			p5: "503 virhekoodi tarkoittaa, että palvelimella on väliaikainen lyhytkestoinen ongelma, tai että sitä ylläpidetään parhaillaan. Virhe häviää normaalisti nopeasti.",
+			p6: "Mitä voin tehdä?",
+			p7: "Jos olet sivuston käyttäjä",
+			p8: "Pahoittelemme käyttökatkosta, valvontamme on havainnut ongelman ja sitä selvitetään parhaillaan.",
+			p9: "Jos olet sivuston omistaja",
+			p10: "Ongelma on todennäköisesti väliaikainen, mutta voit varmuudeksi tarkistaa sivuston tilankäytön ja tietokantayhteyden.",
+		},
+		en: {
+			p1: "503 Service Unavailable",
+			p2: "The web server is returning an unexpected temporary error for",
+			p3: "Try This Page Again",
+			p4: "What happened?",
+			p5: "A 503 error status implies that this is a temporary condition due to a temporary overloading or maintenance of the server. This error is normally a brief temporary interruption.",
+			p6: "What can I do?",
+			p7: "If you're a site vistor",
+			p8: "If you need immediate assistance, please send us an email instead. We apologize for any inconvenience.",
+			p9: "If you're the site owner",
+			p10: "This error is mostly likely very brief, the best thing to do is to check back in a few minutes and everything will probably be working normal again.",
+		}
+	}
+
+	window.i18n = ( function( window, document, $, lang ) {
+		
+		var app = {};
+
+		app.locales = lang;
+
+		app.cache = function() {
+			app.$menu = $("#i18n-menu");
+		};
+
+		app.init = function() {
+			app.cache();
+
+			var locale = app.getLocale();
+
+			if (locale)
+				app.localize(locale);
+			else
+				app.localize("fi-FI"); // fallback to fi-FI
+
+			app.$menu.on("click", "a", app.toggleLocale);
+		};
+
+		app.toggleLocale = function(e) {
+			e.preventDefault();
+			app.localize(e.target.id);
+		};
+
+		app.localize = function(locale) {
+			switch(locale) {
+				case "fi-FI":
+					$.each( app.locales.fi, function( key, value ) {
+						if(key == "p1") document.title = value;
+						var elem = $("#" + key);
+						elem.html(value);
+					});
+				break;
+				
+				case "en":
+				case "en-GB":
+				case "en-US":
+				// etc
+					$.each( app.locales.en, function( key, value ) {
+						if(key == "p1") document.title = value;
+						var elem = $("#" + key);
+						elem.html(value);
+					});
+				break;
+			};
+		};
+
+		app.getLocale = function() {
+			return window.navigator.userLanguage || window.navigator.language;
+		};
+
+		$(document).ready( app.init );
+
+		return app;
+
+	})( window, document, jQuery, lang);
+</script>
+</body>
+</html>

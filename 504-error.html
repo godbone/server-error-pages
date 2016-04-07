@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>504</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+	<style>
+		.jumbotron {
+			font-size: 21px;
+			font-weight: 200;
+			line-height: 2.1428571435;
+			color: inherit;
+			padding: 10px 0px;
+		}
+		.masthead, .body-content, {
+			padding-left: 15px;
+			padding-right: 15px;
+		}
+		.jumbotron {
+			text-align: center;
+			background-color: transparent;
+		}
+		.jumbotron .btn {
+			font-size: 21px;
+			padding: 14px 24px;
+		}
+		.green {color:#5cb85c;}
+		.orange {color:#f0ad4e;}
+		.red {color:#d9534f;}
+		header{
+			width:100%;
+			height:40px;
+			background:#212121;
+			padding:0 20px 0 20px;
+		}
+		#i18n-menu{
+			display: inherit;
+			text-decoration: none;
+			color:white;
+			padding:0;
+			margin:0;
+			font-size: 0;
+		}
+		#i18n-menu a{
+			color:#C9C9C9;
+			display: block;
+			padding:0 5px 0 5px;
+			min-width: 50px;
+		}
+		#i18n-menu li{
+			font-size: 16px;
+			text-align: center;
+			list-style: none;
+			display: inline-block;
+			height:100%;
+			line-height: 40px;
+			cursor:pointer;
+		}
+		#i18n-menu li:hover{
+			background:#555555;
+		}
+	</style>
+	<script type="text/javascript">
+		function loadDomain() {
+			var display = document.getElementById("display-domain");
+			display.innerHTML = document.domain;
+		}
+	</script>
+</head>
+<body onload="javascript:loadDomain();">
+<header>
+	<ul id="i18n-menu">
+		<li><a href="#" id="fi-FI">FI</a></li>
+		<li><a href="#" id="en-GB">EN</a></li>
+	</ul>
+</header>
+<div class="container">
+	<div class="jumbotron">
+		<h1><i class='fa fa-clock-o orange'></i> <span id="p1"></span></h1>
+		<p class="lead"><span id="p2"></span> <em><span id='display-domain'></span></em>.</p>
+		<p><a href="javascript:document.location.reload(true);" class="btn btn-default btn-lg"><span class="green" id="p3"></span></a>
+		</p>
+	</div>
+</div>
+<div class="container">
+	<div class="body-content">
+		<div class="row">
+			<div class="col-md-6">
+				<h2 id="p4"></h2>
+				<p id="p5" class="lead"></p>
+			</div>
+			<div class="col-md-6">
+				<h2 id="p6"></h2>
+				<a onclick='window.location = "http://isup.me/"+window.location.hostname' id="isup"></a>
+				<p id="p7" class="lead"></p>
+				<p id="p8"></p>
+				<p id="p9" class="lead"></p>
+				<p id="p10"></p>
+		 </div>
+		</div>
+	</div>
+</div>
+<script>
+	var lang = {
+		fi: {
+			p1: "504 Yhdyskäytävän aikakatkaisu",
+			p2: "Emme löytäneet etsimääsi osoitteesta",
+			p3: "Päivitä sivu",
+			p4: "Mitä tapahtui?",
+			p5: "504 Virhekoodi tarkoittaa, että nettisivun palvelimien välillä on hidas yhteys.",
+			p6: "Mitä voin tehdä?",
+			p7: "Jos olet sivuston käyttäjä",
+			p8: "Välimuistin tyhjentäminen sekä sivun päivittäminen saattavat ratkaista ongelman. Jos ongelma jatkuu ja tarvitset välitöntä apua, ole meihin yhteydessä sähköpostitse.",
+			p9: "Jos olet sivuston omistaja",
+			p10: "Välimuistin tyhjentäminen sekä sivun päivittäminen saattavat ratkaista ongelman. Jos ongelma jatkuu ja tarvitset välitöntä apua, ole yhteydessä palveluntarjoajaasi.",
+			isup: "Tarkista onko sivu alhaalla kaikilla vai vain sinulla.",
+		},
+		en: {
+			p1: "504 Gateway Timeout",
+			p2: "The web server is returning an unexpected networking error for",
+			p3: "Try This Page Again",
+			p4: "What happened?",
+			p5: "A 504 error status implies there is a slow IP communication problem between back-end servers attempting to fulfill this request.",
+			p6: "What can I do?",
+			p7: "If you're a site vistor",
+			p8: "Also, clearing your browser cache and refreshing the page may clear this issue. If the problem persists and you need immediate assistance, please send us an email instead.",
+			p9: "If you're the site owner",
+			p10: "Clearing your browser cache and refreshing the page may clear this issue. If the problem persists and you need immediate assistance, please contact your website provider.",
+			isup: "Check to see if this website down for everyone or just you.",
+		}
+	}
+
+	window.i18n = ( function( window, document, $, lang ) {
+		
+		var app = {};
+
+		app.locales = lang;
+
+		app.cache = function() {
+			app.$menu = $("#i18n-menu");
+		};
+
+		app.init = function() {
+			app.cache();
+
+			var locale = app.getLocale();
+
+			if (locale)
+				app.localize(locale);
+			else
+				app.localize("fi-FI"); // fallback to fi-FI
+
+			app.$menu.on("click", "a", app.toggleLocale);
+		};
+
+		app.toggleLocale = function(e) {
+			e.preventDefault();
+			app.localize(e.target.id);
+		};
+
+		app.localize = function(locale) {
+			switch(locale) {
+				case "fi-FI":
+					$.each( app.locales.fi, function( key, value ) {
+						if(key == "p1") document.title = value;
+						var elem = $("#" + key);
+						elem.html(value);
+					});
+				break;
+				
+				case "en":
+				case "en-GB":
+				case "en-US":
+				// etc
+					$.each( app.locales.en, function( key, value ) {
+						if(key == "p1") document.title = value;
+						var elem = $("#" + key);
+						elem.html(value);
+					});
+				break;
+			};
+		};
+
+		app.getLocale = function() {
+			return window.navigator.userLanguage || window.navigator.language;
+		};
+
+		$(document).ready( app.init );
+
+		return app;
+
+	})( window, document, jQuery, lang);
+</script>
+</body>
+</html>
